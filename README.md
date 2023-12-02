@@ -3,9 +3,9 @@
 | Day | Language |
 |----|------|
 | 1  |  ![Python1](https://skillicons.dev/icons?i=py) |
-| 2  |  |
+| 2  |  ![Scala1](https://skillicons.dev/icons?i=scala) |
 | 3  |  |
-| 4  |      |
+| 4  |  |
 | 5  |  |
 | 6  |  |
 | 7  |  |
