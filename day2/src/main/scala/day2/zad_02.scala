@@ -2,8 +2,8 @@ package day2
 
 case class MinValues(minBlue: Int, minGreen: Int, minRed: Int)
 
-def minValue(array: Option[Array[Cube]]): Int = {
-  val extractedValue = array match
+def maxValue(cubes: Option[Array[Cube]]): Int = {
+  val extractedValue = cubes match
     case Some(value) => value
     case None => throw Exception()
 
@@ -13,10 +13,10 @@ def minValue(array: Option[Array[Cube]]): Int = {
 @main
 def Main2(): Unit = {
   val minValues = games().map(g => {
-    val cubes = g.cubes.flatten.groupBy(c => c.color)
-    val blueMinValue = minValue(cubes.get('b'))
-    val greenMinValue = minValue(cubes.get('g'))
-    val redMinValue = minValue(cubes.get('r'))
+    val cubes = g.sets.flatten.groupBy(c => c.color)
+    val blueMinValue = maxValue(cubes.get('b'))
+    val greenMinValue = maxValue(cubes.get('g'))
+    val redMinValue = maxValue(cubes.get('r'))
 
     MinValues(blueMinValue, greenMinValue, redMinValue)
   })

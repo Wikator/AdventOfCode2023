@@ -3,7 +3,7 @@ package day2
 import scala.io.Source
 
 case class Cube(color: Char, quantity: Int)
-case class Game(gameNumber: Int, cubes: Array[Array[Cube]])
+case class Game(gameNumber: Int, sets: Array[Array[Cube]])
 
 def secondElement[A](array: Array[A]): A =
   array.tail.head
