@@ -26,7 +26,7 @@ class Gear
   end
 end
 
-def symbols_from_files(lines)
+def symbols_from_lines(lines)
   (0..lines.count - 1).flat_map do |i|
     (0..lines[i].length - 1).reduce([]) do |acc, j|
       if lines[i][j] == '*'
@@ -48,7 +48,7 @@ end
 
 def find_gear(lines)
   numbers = Shared.numbers_from_lines(lines)
-  symbols = symbols_from_files(lines)
+  symbols = symbols_from_lines(lines)
 
   symbols.reduce([]) do |acc, symbol|
     adjacent_numbers = numbers.select do |number|
