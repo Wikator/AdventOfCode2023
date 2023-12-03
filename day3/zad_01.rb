@@ -2,25 +2,32 @@
 
 require_relative 'shared'
 
-def pick_correct_numbers
-  lines = Shared.read_from_file
-  numbers = Shared.numbers_from_file
-  symbols = %w[@ # $ % & * - + = /]
-  (0..lines.count - 1).flat_map do |i|
-    correct_numbers = []
-    (0..lines[i].length - 1).each do |j|
-      next unless symbols.include?(lines[i][j])
 
-      adjacent_numbers = numbers.select do |number|
-        number.possible_indexes_for_symbol.include?([i, j])
-      end
-      adjacent_numbers.each do |num|
-        correct_numbers.append(num)
-        numbers.delete(num)
-      end
-    end
-    correct_numbers
+def find_adjacent_numbers(numbers, y_index, x_index)
+  numbers.select do |number|
+    number.possible_indexes_for_symbol.include?([y_index, x_index])
   end
 end
 
-puts pick_correct_numbers.sum(&:value)
+def find_correct_numbers(lines, symbols)
+  numbers = Shared.numbers_from_lines(lines)
+  (0..lines.count - 1).flat_map do |i|
+    (0..lines[i].length - 1).each_with_object([]) do |j, acc|
+      next unless symbols.include?(lines[i][j])
+
+      find_adjacent_numbers(numbers, i, j).each do |num|
+        acc.push(num)
+        numbers.delete(num)
+      end
+    end
+  end
+end
+
+def zad01
+  lines = Shared.lines_from_file
+  symbols = %w[@ # $ % & * - + = /]
+  correct_numbers = find_correct_numbers(lines, symbols)
+  correct_numbers.sum(&:value)
+end
+
+puts zad01
