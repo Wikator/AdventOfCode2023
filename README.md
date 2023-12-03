@@ -4,7 +4,7 @@
 |----|------|
 | 1  |  ![Python1](https://skillicons.dev/icons?i=py) |
 | 2  |  ![Scala1](https://skillicons.dev/icons?i=scala) |
-| 3  |  |
+| 3  |  ![Ruby1](https://skillicons.dev/icons?i=ruby) |
 | 4  |  |
 | 5  |  |
 | 6  |  |
