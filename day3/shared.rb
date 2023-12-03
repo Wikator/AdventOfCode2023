@@ -27,13 +27,13 @@ module Shared
 
   def self.numbers_from_lines(file)
     lines = file
-    (0..lines.count - 1).flat_map do |i|
+    (0...lines.count).flat_map do |i|
       numbers_from_line(i, lines)
     end
   end
 
   def self.numbers_from_line(y_index, lines)
-    line_indexes = (0..lines[y_index].length - 1)
+    line_indexes = (0...lines[y_index].length)
     numbers = line_indexes.reduce({ numbers: [], digits: [], start_index: nil }) do |acc, j|
       add_digit_to_acc(acc, j, lines, y_index)
     rescue ArgumentError

@@ -27,8 +27,8 @@ class Gear
 end
 
 def symbols_from_lines(lines)
-  (0..lines.count - 1).flat_map do |i|
-    (0..lines[i].length - 1).reduce([]) do |acc, j|
+  (0...lines.count).flat_map do |i|
+    (0...lines[i].length).reduce([]) do |acc, j|
       if lines[i][j] == '*'
         acc.push(GearSymbol.new(i, j))
       else

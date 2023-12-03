@@ -11,8 +11,8 @@ end
 
 def find_correct_numbers(lines, symbols)
   numbers = Shared.numbers_from_lines(lines)
-  (0..lines.count - 1).flat_map do |i|
-    (0..lines[i].length - 1).each_with_object([]) do |j, acc|
+  (0...lines.count).flat_map do |i|
+    (0...lines[i].length).each_with_object([]) do |j, acc|
       next unless symbols.include?(lines[i][j])
 
       find_adjacent_numbers(numbers, i, j).each do |num|
