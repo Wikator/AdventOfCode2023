@@ -58,10 +58,10 @@ def find_gear(lines)
   end
 end
 
-def zad02
+def part2
   lines = Shared.lines_from_file
   gear = find_gear(lines)
   gear.sum(&:value)
 end
 
-puts zad02
+puts part2

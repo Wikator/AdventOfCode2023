@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Functions and classes used in both problems
+# Functions and classes used in both parts
 module Shared
   # Contains a number value, and indexes where symbol should be located
   class Number

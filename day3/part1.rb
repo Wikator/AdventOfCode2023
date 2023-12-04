@@ -2,7 +2,6 @@
 
 require_relative 'shared'
 
-
 def find_adjacent_numbers(numbers, y_index, x_index)
   numbers.select do |number|
     number.possible_indexes_for_symbol.include?([y_index, x_index])
@@ -23,11 +22,11 @@ def find_correct_numbers(lines, symbols)
   end
 end
 
-def zad01
+def part1
   lines = Shared.lines_from_file
   symbols = %w[@ # $ % & * - + = /]
   correct_numbers = find_correct_numbers(lines, symbols)
   correct_numbers.sum(&:value)
 end
 
-puts zad01
+puts part1
