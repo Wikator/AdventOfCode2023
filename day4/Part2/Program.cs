@@ -12,14 +12,13 @@ internal class Program
 
         var result = cards.Aggregate(0, (acc, card) =>
         {
-            var repeatingNumbersCount = card.RepeatingNumbersCount;
             var originalsAndCopies = 1 + dict.TryGetValue(card.Number, out var copies) switch
             {
                 true => copies,
                 false => 0
             };
 
-            for (var i = card.Number + 1; i <= card.Number + repeatingNumbersCount; i++)
+            for (var i = card.Number + 1; i <= card.Number + card.RepeatingNumbersCount; i++)
             {
                 if (!dict.TryAdd(i, originalsAndCopies))
                     dict[i] += originalsAndCopies;

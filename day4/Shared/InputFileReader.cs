@@ -30,7 +30,8 @@ public static class InputFileReader
     }
 }
 
-public record Card(int Number, IEnumerable<int> WinningNumbers, IEnumerable<int> OwnedNumbers)
+public class Card(int number, IEnumerable<int> winningNumbers, IEnumerable<int> ownedNumbers)
 {
-    public int RepeatingNumbersCount => OwnedNumbers.Intersect(WinningNumbers).Count();
+    public int Number { get; } = number;
+    public int RepeatingNumbersCount { get; } = ownedNumbers.Intersect(winningNumbers).Count();
 }

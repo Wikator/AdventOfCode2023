@@ -11,11 +11,10 @@ internal class Program
 
         var answer = cards.Aggregate(0, (acc, card) =>
         {
-            var count = card.RepeatingNumbersCount;
-            return acc + count switch
+            return acc + card.RepeatingNumbersCount switch
             {
                 0 => 0,
-                _ => (int)Math.Pow(2, count - 1)
+                _ => (int)Math.Pow(2, card.RepeatingNumbersCount - 1)
             };
         });
 
