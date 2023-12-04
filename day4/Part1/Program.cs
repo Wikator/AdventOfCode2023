@@ -1,23 +1,36 @@
-﻿using Shared;
-
-namespace Part1;
+﻿namespace Part1;
 
 internal class Program
 {
     private static void Main()
     {
-        var lines = InputFileReader.ReadAllLines("input.txt");
-        var cards = InputFileReader.GetCardsFromLines(lines);
+        var result = File.ReadAllLines("data/input.txt")
+            .Select(GetRepeatingNumbersCount)
+            .Aggregate(0, AddPoints);
 
-        var answer = cards.Aggregate(0, (acc, card) =>
-        {
-            return acc + card.RepeatingNumbersCount switch
-            {
-                0 => 0,
-                _ => (int)Math.Pow(2, card.RepeatingNumbersCount - 1)
-            };
-        });
-
-        Console.WriteLine(answer);
+        Console.WriteLine(result);
     }
+
+    private static int GetRepeatingNumbersCount(string line)
+    {
+        var splitLines = line.Split(" | ");
+        var splitFirstPart = splitLines[0].Split(": ");
+                
+        var winningNumbers = splitFirstPart[1].Split(" ")
+            .Where(n => n != string.Empty)
+            .Select(int.Parse);
+                
+        var ownedNumbers = splitLines[1].Split(" ")
+            .Where(n => n != string.Empty)
+            .Select(int.Parse);
+                
+        return ownedNumbers.Intersect(winningNumbers).Count();
+    }
+    
+    private static int AddPoints(int accumulator, int repeatingNumbersCount) =>
+        accumulator + repeatingNumbersCount switch
+        {
+            0 => 0,
+            _ => (int)Math.Pow(2, repeatingNumbersCount - 1)
+        };
 }
