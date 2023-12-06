@@ -3,10 +3,10 @@
 require_relative 'shared'
 
 def races_from_lines(lines)
-  split_time = lines[0].split(' ').reject { |str| str.eql?('') }
-  split_distance = lines[1].split(' ').reject { |str| str.eql?('') }
+  split_time = lines[0].scan(/\d+/)
+  split_distance = lines[1].scan(/\d+/)
 
-  (1...split_time.count).map do |index|
+  (0...split_time.count).map do |index|
     Shared::Race.new(Integer(split_time[index]), Integer(split_distance[index]))
   end
 end
