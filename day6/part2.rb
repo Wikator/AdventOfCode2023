@@ -2,7 +2,7 @@
 
 require_relative 'shared'
 
-def races_from_lines(lines)
+def race_from_lines(lines)
   split_time = lines[0].split('').reject { |str| str.eql?(' ') }
   split_distance = lines[1].split('').reject { |str| str.eql?(' ') }
 
@@ -23,7 +23,7 @@ end
 
 def part2
   lines = Shared.lines_from_file
-  race = races_from_lines(lines)
+  race = race_from_lines(lines)
 
   Shared.number_of_ways_to_win(race)
 end
