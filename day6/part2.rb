@@ -3,20 +3,22 @@
 require_relative 'shared'
 
 def race_from_lines(lines)
-  split_time = lines[0].scan(/\d/)
-  split_distance = lines[1].scan(/\d/)
+  time_digits = digits_from_line(lines[0])
+  distance_digits = digits_from_line(lines[1])
 
-  time = split_reducer(split_time.reverse)
-  distance = split_reducer(split_distance.reverse)
+  time = digits_reducer(time_digits)
+  distance = digits_reducer(distance_digits)
   Shared::Race.new(time, distance)
 end
 
-def split_reducer(split)
-  result = split.reduce({ number: 0, next_power: 0 }) do |accumulator, current|
-    number = Integer(current)
-    { number: accumulator[:number] + number * 10**accumulator[:next_power], next_power: accumulator[:next_power] + 1 }
-  end
-  result[:number]
+def digits_from_line(line)
+  line.scan(/\d/).map { |digit_string| Integer(digit_string) }
+end
+
+def digits_reducer(digits)
+  digits.reverse.reduce({ number: 0, next_power: 0 }) do |acc, digit|
+    { number: acc[:number] + digit * 10**acc[:next_power], next_power: acc[:next_power] + 1 }
+  end[:number]
 end
 
 def part2

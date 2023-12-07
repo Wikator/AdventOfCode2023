@@ -20,8 +20,7 @@ module Shared
   def self.number_of_ways_to_win(race)
     (0..race.time).reduce(0) do |ways_to_win_accumulator, button_hold_time|
       distance = (race.time - button_hold_time) * button_hold_time
-      ways_to_win_accumulator += 1 if distance > race.distance
-      ways_to_win_accumulator
+      distance > race.distance ? ways_to_win_accumulator + 1 : ways_to_win_accumulator
     end
   end
 end
