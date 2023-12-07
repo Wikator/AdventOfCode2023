@@ -8,7 +8,7 @@
 | 4  |  ![C#1](https://skillicons.dev/icons?i=cs) |
 | 5  |  ![Typescript1](https://skillicons.dev/icons?i=ts) |
 | 6  |  ![Ruby2](https://skillicons.dev/icons?i=ruby) |
-| 7  |  |
+| 7  |  ![C#2](https://skillicons.dev/icons?i=cs) |
 | 8  |  |
 | 9  |  |
 | 10 |  |
