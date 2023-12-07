@@ -1,6 +1,4 @@
-﻿using Shared.Records;
-
-namespace Shared;
+﻿namespace Shared;
 
 public static class InputFileReader
 {
