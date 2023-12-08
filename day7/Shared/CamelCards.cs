@@ -18,29 +18,31 @@ public static class CamelCards
 
             var labelCounts = getLabelCounts(cardList);
             
-            switch (labelCounts.Length)
+            switch (labelCounts)
             {
-                case 1:
+                case [5]:
                     handTypes.FiveOfAKinds.Add(hand);
                     break;
-                case 2 when labelCounts.Any(g => g == 4):
+                case [4, 1]:
                     handTypes.FourOfAKinds.Add(hand);
                     break;
-                case 2:
+                case [3, 2]:
                     handTypes.FullHouses.Add(hand);
                     break;
-                case 3 when labelCounts.Any(g => g == 3):
+                case [3, 1, 1]:
                     handTypes.ThreeOfAKinds.Add(hand);
                     break;
-                case 3:
+                case [2, 2, 1]:
                     handTypes.TwoPairs.Add(hand);
                     break;
-                case 4:
+                case [2, 1, 1, 1]:
                     handTypes.OnePairs.Add(hand);
                     break;
-                case 5:
+                case [1, 1, 1, 1, 1]:
                     handTypes.HighCards.Add(hand);
                     break;
+                default:
+                    throw new ArgumentException("Invalid hand length");
             }
         }
 

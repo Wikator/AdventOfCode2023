@@ -28,12 +28,17 @@ internal class Program
 
         int[] GetLabelCounts(int[] cardList)
         {
-            return cardList
-                .Select(c => (c, cardList.Count(l => l == c || l == labelStrengths['J'])))
-                .Where(c => c.Item1 != labelStrengths['J'] || c.Item2 == 5)
-                .Distinct()
-                .Select(c => c.Item2)
+            if (cardList.All(c => c == labelStrengths['J']))
+                return [cardList.Length];
+
+            var labelCounts = cardList
+                .Where(c => c != labelStrengths['J'])
+                .GroupBy(c => c)
+                .Select(g => g.Count())
+                .OrderDescending()
                 .ToArray();
+
+            return [labelCounts[0] + cardList.Count(c => c == labelStrengths['J']), ..labelCounts.Skip(1)];
         }
     }
 }

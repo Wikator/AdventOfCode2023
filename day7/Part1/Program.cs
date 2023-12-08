@@ -28,9 +28,9 @@ internal class Program
         int[] GetLabelCounts(int[] cardList)
         {
             return cardList
-                .Select(c => (c, cardList.Count(l => l == c)))
-                .Distinct()
-                .Select(c => c.Item2)
+                .GroupBy(c => c)
+                .Select(g => g.Count())
+                .OrderDescending()
                 .ToArray();
         }
     }
