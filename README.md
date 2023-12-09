@@ -10,7 +10,7 @@
 | 6  |  ![Ruby2](https://skillicons.dev/icons?i=ruby) |
 | 7  |  ![C#2](https://skillicons.dev/icons?i=cs) |
 | 8  |  ![Python2](https://skillicons.dev/icons?i=py) |
-| 9  |  |
+| 9  |  ![Typescript2](https://skillicons.dev/icons?i=ts) |
 | 10 |  |
 | 11 |  |
 | 12 |  |
