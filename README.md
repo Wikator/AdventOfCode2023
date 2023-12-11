@@ -11,8 +11,8 @@
 | 7  |  ![C#2](https://skillicons.dev/icons?i=cs) |
 | 8  |  ![Python2](https://skillicons.dev/icons?i=py) |
 | 9  |  ![Typescript2](https://skillicons.dev/icons?i=ts) |
-| 10 |  |
-| 11 |  |
+| 10 |  ![Scala2](https://skillicons.dev/icons?i=scala) |
+| 11 |  ![Typescript3](https://skillicons.dev/icons?i=ts) |
 | 12 |  |
 | 13 |  |
 | 14 |  |
