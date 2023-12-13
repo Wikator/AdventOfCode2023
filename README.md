@@ -13,7 +13,7 @@
 | 9  |  ![Typescript2](https://skillicons.dev/icons?i=ts) |
 | 10 |  ![Scala2](https://skillicons.dev/icons?i=scala) |
 | 11 |  ![Typescript3](https://skillicons.dev/icons?i=ts) |
-| 12 |  |
+| 12 |  ![Ruby3](https://skillicons.dev/icons?i=ruby) |
 | 13 |  |
 | 14 |  |
 | 15 |  |
