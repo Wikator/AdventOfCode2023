@@ -12,7 +12,7 @@ internal static class Program
             if (curr == string.Empty)
                 return [..acc, []];
 
-            acc[^1].Add(curr);
+            acc.Last().Add(curr);
             return acc;
         });
         
@@ -104,20 +104,20 @@ internal static class Program
                     .ToArray())
                 .ToArray();
                 
-            if (firstPart[0].Length > secondPart[0].Length)
+            if (firstPart.First().Length > secondPart.First().Length)
             {
                 firstPart = firstPart
                     .Select(s => s
-                        .Skip(firstPart[1].Length - secondPart[0].Length)
+                        .Skip(firstPart.First().Length - secondPart.First().Length)
                         .ToArray())
                     .ToArray();
             }
 
-            if (firstPart[0].Length < secondPart[0].Length)
+            if (firstPart.First().Length < secondPart.First().Length)
             {
                 secondPart = secondPart
                     .Select(s => s
-                        .Take(firstPart[0].Length)
+                        .Take(firstPart.First().Length)
                         .ToArray())
                     .ToArray();
             }
@@ -201,20 +201,20 @@ internal static class Program
                     .ToArray())
                 .ToArray();
                 
-            if (firstPart[0].Length > secondPart[0].Length)
+            if (firstPart.First().Length > secondPart.First().Length)
             {
                 firstPart = firstPart
                     .Select(s => s
-                        .Skip(firstPart[0].Length - secondPart[0].Length)
+                        .Skip(firstPart.First().Length - secondPart.First().Length)
                         .ToArray())
                     .ToArray();
             }
 
-            if (firstPart[0].Length < secondPart[0].Length)
+            if (firstPart.First().Length < secondPart.First().Length)
             {
                 secondPart = secondPart
                     .Select(s => s
-                        .Take(firstPart[0].Length)
+                        .Take(firstPart.First().Length)
                         .ToArray())
                     .ToArray();
             }
