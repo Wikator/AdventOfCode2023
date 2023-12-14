@@ -1,11 +1,13 @@
-﻿namespace Part2;
+﻿using Part2.Extensions;
+
+namespace Part2;
 
 internal static class Program
 {
     public static void Main()
     {
         var lines = File.ReadLines("data/input.txt");
-        var sections = lines.Aggregate(new List<List<string>> { new List<string>()}, (acc, curr) =>
+        var sections = lines.Aggregate(new List<List<string>> { new() }, (acc, curr) =>
         {
             if (curr == string.Empty)
                 return [..acc, []];
@@ -13,51 +15,44 @@ internal static class Program
             acc[^1].Add(curr);
             return acc;
         });
-        var acc = 0;
-        for (var i = 0; i < sections.Count; i++)
-        {
-            var originalReflection = GetOriginalMirrorHorizontal(sections[i])
-                                     ?? GetOriginalMirrorVertical(sections[i]);
-            
-            for (var j = 0; j < sections[i].Count; j++)
-            {
-                var con = true;
-                for (var z = 0; z < sections[i][j].Length; z++)
-                {
-                    var current = sections[i][j][z];
-
-                    if (current == '#')
-                    {
-                        sections[i][j] = sections[i][j].Take(z).Aggregate("", (acc, curr) => acc + curr) + '.' + sections[i][j].Skip(z + 1).Aggregate("", (acc, curr) => acc + curr);
-                    }
-                    else
-                    {
-                        sections[i][j] = sections[i][j].Take(z).Aggregate("", (acc, curr) => acc + curr) + '#' + sections[i][j].Skip(z + 1).Aggregate("", (acc, curr) => acc + curr);
-                    }
-                    acc += MirrorHorizontal(sections[i], originalReflection) +
-                           MirrorVertical(sections[i], originalReflection);
-                    
-                    
-                    if (MirrorHorizontal(sections[i], originalReflection) +
-                        MirrorVertical(sections[i], originalReflection) > 0)
-                    {
-                        sections[i][j] = sections[i][j].Take(z).Aggregate("", (acc, curr) => acc + curr) + current + sections[i][j].Skip(z + 1).Aggregate("", (acc, curr) => acc + curr);
-                        con = false;
-                        break;
-                    }
-                    sections[i][j] = sections[i][j].Take(z).Aggregate("", (acc, curr) => acc + curr) + current + sections[i][j].Skip(z + 1).Aggregate("", (acc, curr) => acc + curr);
-                }
-                if (!con)
-                    break;
-            }
-        }
         
-        Console.WriteLine(acc);
+        var result = sections.Aggregate(0, (acc, section) =>
+        {
+            var originalReflection = GetMirrorHorizontalReflection(section)
+                                     ?? GetMirrorVerticalReflection(section)!;
+            
+            for (var j = 0; j < section.Count; j++)
+            {
+                for (var z = 0; z < section[j].Length; z++)
+                {
+                    var current = section[j][z];
+
+                    section[j] = current switch
+                    {
+                        '#' => $"{section[j].Take(z).ConvertToString()}.{section[j].Skip(z + 1).ConvertToString()}",
+                        '.' => $"{section[j].Take(z).ConvertToString()}#{section[j].Skip(z + 1).ConvertToString()}",
+                        _ => throw new Exception("Invalid symbols in input")
+                    };
+                    
+                    var addToAcc = NewMirrorHorizontal(section, originalReflection) +
+                           NewMirrorVertical(section, originalReflection);
+                    
+                    if (addToAcc > 0)
+                        return acc + addToAcc;
+                    
+                    section[j] = $"{section[j].Take(z).ConvertToString()}{current}{section[j].Skip(z + 1).ConvertToString()}";
+                }
+            }
+
+            throw new Exception("No new reflection found in section");
+        });
+        
+        Console.WriteLine(result);
     }
 
-    private static int MirrorHorizontal(IReadOnlyCollection<string> section, List<string> originalReflection)
+    private static int NewMirrorHorizontal(IReadOnlyCollection<string> section,
+        IReadOnlyCollection<string> originalReflection)
     {
-        var acc = 0;
         for (var i = 1; i < section.Count; i++)
         {
             var firstPart = section
@@ -84,16 +79,17 @@ internal static class Program
 
             if (firstPart.SequenceEqual(secondPart.Reverse()) &&
                 !originalReflection.SequenceEqual([..firstPart, ..secondPart]))
-                acc += i * 100;
+            {
+                return i * 100;
+            }
         }
 
-        return acc;
+        return 0;
     }
 
-    private static int MirrorVertical(IReadOnlyList<string> section, List<string> originalReflection)
+    private static int NewMirrorVertical(IReadOnlyList<string> section,
+        IReadOnlyCollection<string> originalReflection)
     {
-        var acc = 0;
-        
         for (var i = 1; i < section[0].Length; i++)
         {
             var firstPart = section
@@ -108,20 +104,20 @@ internal static class Program
                     .ToArray())
                 .ToArray();
                 
-            if (firstPart[1].Length > secondPart[1].Length)
+            if (firstPart[0].Length > secondPart[0].Length)
             {
                 firstPart = firstPart
                     .Select(s => s
-                        .Skip(firstPart[1].Length - secondPart[1].Length)
+                        .Skip(firstPart[1].Length - secondPart[0].Length)
                         .ToArray())
                     .ToArray();
             }
 
-            if (firstPart[1].Length < secondPart[1].Length)
+            if (firstPart[0].Length < secondPart[0].Length)
             {
                 secondPart = secondPart
                     .Select(s => s
-                        .Take(firstPart[1].Length)
+                        .Take(firstPart[0].Length)
                         .ToArray())
                     .ToArray();
             }
@@ -137,43 +133,26 @@ internal static class Program
                     .SequenceEqual(secondPart[j]))
                 .Any();
 
-            if (isMirrored)
-            {
-                secondPart = secondPart
-                    .Select(s => s
-                        .Reverse()
-                        .ToArray())
-                    .ToArray();
+            if (!isMirrored)
+                continue;
+            
+            secondPart = secondPart
+                .Select(s => s
+                    .Reverse()
+                    .ToArray())
+                .ToArray();
 
-                var reflection = new List<string>();
-                
-                for (var j = 0; j < firstPart.Length; j++)
-                    reflection.Add(firstPart[j].Aggregate("", (acc1, curr) => acc1 + curr) +
-                                   secondPart[j].Aggregate("", (acc1, curr) => acc1 + curr));
+            var reflection = firstPart
+                .Select((t, j) => $"{t.ConvertToString()}{secondPart[j].ConvertToString()}").ToArray();
 
-                if (!originalReflection.SequenceEqual(reflection))
-                {
-                    foreach (var line in originalReflection)
-                    {
-                        Console.WriteLine(line);
-                    }
-                    
-                    Console.WriteLine("");
-                    foreach (var line in reflection)
-                    {
-                        Console.WriteLine(line);
-                    }
-                    Console.WriteLine("");
-                    acc += i;
-                }
-
-            }
+            if (!originalReflection.SequenceEqual(reflection))
+                return i;
         }
 
-        return acc;
+        return 0;
     }
     
-    private static List<string>? GetOriginalMirrorHorizontal(IReadOnlyCollection<string> section)
+    private static List<string>? GetMirrorHorizontalReflection(IReadOnlyCollection<string> section)
     {
         for (var i = 1; i < section.Count; i++)
         {
@@ -206,7 +185,7 @@ internal static class Program
         return null;
     }
     
-    private static List<string>? GetOriginalMirrorVertical(IReadOnlyList<string> section)
+    private static List<string>? GetMirrorVerticalReflection(IReadOnlyList<string> section)
     {
         for (var i = 1; i < section[0].Length; i++)
         {
@@ -222,20 +201,20 @@ internal static class Program
                     .ToArray())
                 .ToArray();
                 
-            if (firstPart[1].Length > secondPart[1].Length)
+            if (firstPart[0].Length > secondPart[0].Length)
             {
                 firstPart = firstPart
                     .Select(s => s
-                        .Skip(firstPart[1].Length - secondPart[1].Length)
+                        .Skip(firstPart[0].Length - secondPart[0].Length)
                         .ToArray())
                     .ToArray();
             }
 
-            if (firstPart[1].Length < secondPart[1].Length)
+            if (firstPart[0].Length < secondPart[0].Length)
             {
                 secondPart = secondPart
                     .Select(s => s
-                        .Take(firstPart[1].Length)
+                        .Take(firstPart[0].Length)
                         .ToArray())
                     .ToArray();
             }
@@ -251,23 +230,17 @@ internal static class Program
                     .SequenceEqual(secondPart[j]))
                 .Any();
 
-            if (isMirrored)
-            {
-                secondPart = secondPart
-                    .Select(s => s
-                        .Reverse()
-                        .ToArray())
-                    .ToArray();
+            if (!isMirrored)
+                continue;
 
-                var reflection = new List<string>();
+            secondPart = secondPart
+                .Select(s => s
+                    .Reverse()
+                    .ToArray())
+                .ToArray();
 
-                for (var j = 0; j < firstPart.Length; j++)
-                    reflection.Add(firstPart[j].Aggregate("", (acc, curr) => acc + curr) +
-                                   secondPart[j].Aggregate("", (acc, curr) => acc + curr));
-
-                Console.WriteLine("");
-                return reflection;
-            }
+            return firstPart
+                .Select((t, j) => $"{t.ConvertToString()}{secondPart[j].ConvertToString()}").ToList();
         }
 
         return null;

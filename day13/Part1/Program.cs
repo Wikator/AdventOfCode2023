@@ -5,7 +5,7 @@ internal static class Program
     public static void Main()
     {
         var lines = File.ReadLines("data/input.txt");
-        var sections = lines.Aggregate(new List<List<string>> { new List<string>()}, (acc, curr) =>
+        var sections = lines.Aggregate(new List<List<string>> { new()}, (acc, curr) =>
         {
             if (curr == string.Empty)
                 return [..acc, []];
@@ -22,7 +22,6 @@ internal static class Program
 
     private static int MirrorHorizontal(IReadOnlyCollection<string> section)
     {
-        var acc = 0;
         for (var i = 1; i < section.Count; i++)
         {
             var firstPart = section
@@ -48,16 +47,14 @@ internal static class Program
             }
                 
             if (firstPart.SequenceEqual(secondPart.Reverse()))
-                acc += i * 100;
+                return i * 100;
         }
 
-        return acc;
+        return 0;
     }
 
     private static int MirrorVertical(IReadOnlyList<string> section)
     {
-        var acc = 0;
-        
         for (var i = 1; i < section[0].Length; i++)
         {
             var firstPart = section
@@ -72,16 +69,16 @@ internal static class Program
                     .ToArray())
                 .ToArray();
                 
-            if (firstPart[1].Length > secondPart[1].Length)
+            if (firstPart[1].Length > secondPart[0].Length)
             {
                 firstPart = firstPart
                     .Select(s => s
-                        .Skip(firstPart[1].Length - secondPart[1].Length)
+                        .Skip(firstPart[1].Length - secondPart[0].Length)
                         .ToArray())
                     .ToArray();
             }
 
-            if (firstPart[1].Length < secondPart[1].Length)
+            if (firstPart[1].Length < secondPart[0].Length)
             {
                 secondPart = secondPart
                     .Select(s => s
@@ -102,9 +99,9 @@ internal static class Program
                 .Any();
 
             if (isMirrored)
-                acc += i;
+                return i;
         }
 
-        return acc;
+        return 0;
     }
 }
