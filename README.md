@@ -15,7 +15,7 @@
 | 11 |  ![Typescript3](https://skillicons.dev/icons?i=ts) | :star::star: |
 | 12 |  ![Ruby3](https://skillicons.dev/icons?i=ruby) |  |
 | 13 |  ![C#3](https://skillicons.dev/icons?i=cs) | :star::star: |
-| 14 |  ![Scala3](https://skillicons.dev/icons?i=scala) | :star: |
+| 14 |  ![Scala3](https://skillicons.dev/icons?i=scala) | :star::star: |
 | 15 |  |  |
 | 16 |  |  |
 | 17 |  |  |

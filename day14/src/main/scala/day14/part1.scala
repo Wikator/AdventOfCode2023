@@ -35,7 +35,7 @@ def moveAllUp(lines: Array[String], acc: List[String] = List()): Array[String] =
         else
           char
       )
-      .toString()
+      .foldLeft("")((acc, curr) => acc + curr)
     val newLines = lines
       .tail
       .zipWithIndex
