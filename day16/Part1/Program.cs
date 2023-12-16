@@ -17,7 +17,7 @@ internal static class Program
 
         var beam = new Beam(new Coords(0, 0), initialDirection);
 
-        var energizedTiles = Contraption.SendBeam(allTiles, beam);
+        var energizedTiles = Contraption.SendBeams(allTiles, [beam]);
 
         var result = energizedTiles
             .Sum(tile => tile

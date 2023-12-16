@@ -2,7 +2,7 @@
 
 public static class Contraption
 {
-    public static IEnumerable<HashSet<Direction>[]> SendBeam(string[] allTiles, Beam initialBeam)
+    public static HashSet<Direction>[][] SendBeams(string[] allTiles, HashSet<Beam> beams)
     {
         var energizedTiles = allTiles
             .Select(tile => tile
@@ -10,7 +10,6 @@ public static class Contraption
                 .ToArray())
             .ToArray();
         
-        var beams = new HashSet<Beam> { initialBeam };
         while (beams.Count > 0)
         {
             beams = beams.Aggregate(new HashSet<Beam>(), (newBeams, beam) =>
