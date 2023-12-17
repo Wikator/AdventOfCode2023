@@ -1,0 +1,19 @@
+{
+  "name": "day17",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "part1": "tsc part1.ts && node part1.js",
+    "part2": "tsc part2.ts && node part2.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^20.10.4"
+  },
+  "dependencies": {
+    "tsc": "^2.0.4",
+    "typescript": "^5.3.3"
+  }
+}
