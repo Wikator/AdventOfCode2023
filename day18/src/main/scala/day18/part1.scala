@@ -92,12 +92,12 @@ def buildTrench(lines: Array[String], acc: List[String] = List("."), currentCoor
             }).foldLeft("")((acc, curr) => acc + curr)
         })
 
-      val newCoords = splitLine(0) match
-        case "R" => Coords(currentCoords.Y, currentCoords.X + splitLine(1).toInt)
-        case "L" => Coords(currentCoords.Y, if (0 > currentCoords.X - splitLine(1).toInt) then 0 else currentCoords.X - splitLine(1).toInt)
-        case "U" => Coords(if (currentCoords.Y - splitLine(1).toInt) < 0 then 0 else currentCoords.Y - splitLine(1).toInt, currentCoords.X)
-        case "D" => Coords(currentCoords.Y + splitLine(1).toInt, currentCoords.X)
-      buildTrench(lines.tail, newAcc, newCoords)
+    val newCoords = splitLine(0) match
+      case "R" => Coords(currentCoords.Y, currentCoords.X + splitLine(1).toInt)
+      case "L" => Coords(currentCoords.Y, if (0 > currentCoords.X - splitLine(1).toInt) then 0 else currentCoords.X - splitLine(1).toInt)
+      case "U" => Coords(if (currentCoords.Y - splitLine(1).toInt) < 0 then 0 else currentCoords.Y - splitLine(1).toInt, currentCoords.X)
+      case "D" => Coords(currentCoords.Y + splitLine(1).toInt, currentCoords.X)
+    buildTrench(lines.tail, newAcc, newCoords)
 }
 
 
