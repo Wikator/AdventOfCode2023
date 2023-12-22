@@ -1,140 +1,93 @@
-from shared import get_input
 from copy import deepcopy
 
-class Ranges:
-    def __init__(self, xRange, mRange, aRange, sRange):
-        self.xRange = xRange
-        self.mRange = mRange
-        self.aRange = aRange
-        self.sRange = sRange
+
+def get_workflows(file_path):
+    with open(file_path) as file:
+        workflows = {}
+        for line in file.readlines():
+            if line == '\n':
+                return workflows
+
+            split_workflow = line.strip().split('{')
+            workflows[split_workflow[0]] = split_workflow[1][0:-1].split(',')
 
 
-input = get_input('data/input.txt')
-big_acc = []
-
-def get_range(workflows, acc=[]):
-    for workflow in workflows:
-        path = get_ranges(workflow, deepcopy(acc))
-        try:
-            if workflow[1] == '>':
-                acc.append(workflow[0] + '<=' + workflow[2:workflow.index(':')])
-            elif workflow[1] == '<':
-                acc.append(workflow[0] + '>=' + workflow[2:workflow.index(':')])
-        except:
-            pass
-        if path != None and path != []:
-            big_acc.append(path)
+def get_ranges(workflow, acc_path=None):
+    if acc_path is None:
+        acc_path = []
+    for rule in workflow:
+        path = evaluate_rule(rule, deepcopy(acc_path))
+        if len(rule) > 1:
+            if rule[1] == '>':
+                acc_path.append(rule[0] + '<=' + rule[2:rule.index(':')])
+            elif rule[1] == '<':
+                acc_path.append(rule[0] + '>=' + rule[2:rule.index(':')])
+        if path:
+            all_paths.append(path)
 
 
-def get_ranges(workflow, acc):
+def evaluate_rule(workflow, acc_path):
     if workflow == 'A':
-        return acc
+        return acc_path
     elif workflow == 'R':
         return []
     else:
         split_workflow = workflow.split(':')
         if len(split_workflow) == 1:
-            return get_range(input.workflows[split_workflow[0]], deepcopy(acc))
+            get_ranges(workflows[split_workflow[0]], acc_path)
+            return []
         else:
-            acc.append(split_workflow[0])
+            acc_path.append(split_workflow[0])
 
             if split_workflow[1] == 'A':
-                return deepcopy(acc)
+                return acc_path
             elif split_workflow[1] == 'R':
                 return []
             else:
-                return get_range(input.workflows[split_workflow[1]], deepcopy(acc))
+                get_ranges(workflows[split_workflow[1]], acc_path)
+                return []
 
 
-
-get_range(input.workflows['in'])
-acc = []
-for range in big_acc:
-    new_range = Ranges([1, 4000], [1, 4000], [1, 4000], [1, 4000])
-    for rule in range:
-        split_rule = ""
+def map_path_to_range(path):
+    new_range = {
+        'x': [1, 4000],
+        'm': [1, 4000],
+        'a': [1, 4000],
+        's': [1, 4000],
+    }
+    for rule in path:
         if '>' in rule:
             split_rule = rule.split('>')
-            if split_rule[0] == 'x':
-                if split_rule[1][0] == '=':
-                    num = int(split_rule[1][1:])
-                    if new_range.xRange[0] < num:
-                        new_range.xRange[0] = num
-                else:
-                    num = int(split_rule[1])
-                    if new_range.xRange[0] < num + 1:
-                        new_range.xRange[0] = num + 1
-            if split_rule[0] == 'm':
-                if split_rule[1][0] == '=':
-                    num = int(split_rule[1][1:])
-                    if new_range.mRange[0] < num:
-                        new_range.mRange[0] = num
-                else:
-                    num = int(split_rule[1])
-                    if new_range.mRange[0] < num + 1:
-                        new_range.mRange[0] = num + 1
-            if split_rule[0] == 'a':
-                if split_rule[1][0] == '=':
-                    num = int(split_rule[1][1:])
-                    if new_range.aRange[0] < num:
-                        new_range.aRange[0] = num
-                else:
-                    num = int(split_rule[1])
-                    if new_range.aRange[0] < num + 1:
-                        new_range.aRange[0] = num + 1
-            if split_rule[0] == 's':
-                if split_rule[1][0] == '=':
-                    num = int(split_rule[1][1:])
-                    if new_range.sRange[0] < num:
-                        new_range.sRange[0] = num
-                else:
-                    num = int(split_rule[1])
-                    if new_range.sRange[0] < num + 1:
-                        new_range.sRange[0] = num + 1
+            if split_rule[1][0] == '=':
+                num = int(split_rule[1][1:])
+                if new_range[rule[0]][0] < num:
+                    new_range[rule[0]][0] = num
+            else:
+                num = int(split_rule[1])
+                if new_range[rule[0]][0] < num + 1:
+                    new_range[rule[0]][0] = num + 1
         else:
             split_rule = rule.split('<')
-            if split_rule[0] == 'x':
-                if split_rule[1][0] == '=':
-                    num = int(split_rule[1][1:])
-                    if new_range.xRange[1] > num:
-                        new_range.xRange[1] = num
-                else:
-                    num = int(split_rule[1])
-                    if new_range.xRange[1] > num - 1:
-                        new_range.xRange[1] = num - 1
-            if split_rule[0] == 'm':
-                if split_rule[1][0] == '=':
-                    num = int(split_rule[1][1:])
-                    if new_range.mRange[1] > num:
-                        new_range.mRange[1] = num
-                else:
-                    num = int(split_rule[1])
-                    if new_range.mRange[1] > num - 1:
-                        new_range.mRange[1] = num - 1
-            if split_rule[0] == 'a':
-                if split_rule[1][0] == '=':
-                    num = int(split_rule[1][1:])
-                    if new_range.aRange[1] > num:
-                        new_range.aRange[1] = num
-                else:
-                    num = int(split_rule[1])
-                    if new_range.aRange[1] > num - 1:
-                        new_range.aRange[1] = num - 1
-            if split_rule[0] == 's':
-                if split_rule[1][0] == '=':
-                    num = int(split_rule[1][1:])
-                    if new_range.sRange[1] > num:
-                        new_range.sRange[1] = num
-                else:
-                    num = int(split_rule[1])
-                    if new_range.sRange[1] > num - 1:
-                        new_range.sRange[1] = num - 1
+            if split_rule[1][0] == '=':
+                num = int(split_rule[1][1:])
+                if new_range[rule[0]][1] > num:
+                    new_range[rule[0]][1] = num
+            else:
+                num = int(split_rule[1])
+                if new_range[rule[0]][1] > num - 1:
+                    new_range[rule[0]][1] = num - 1
+
+    return new_range
 
 
-    acc.append(new_range)
-
+workflows = get_workflows('data/input.txt')
+all_paths = []
+get_ranges(workflows['in'])
+all_ranges = map(map_path_to_range, all_paths)
 
 res = 0
-for range in acc:
-    res += (range.xRange[1] - range.xRange[0] + 1) * (range.mRange[1] - range.mRange[0] + 1) * (range.aRange[1] - range.aRange[0] + 1) * (range.sRange[1] - range.sRange[0] + 1)
+for path in all_ranges:
+    res += (path['x'][1] - path['x'][0] + 1) * (path['m'][1] - path['m'][0] + 1) * (
+            path['a'][1] - path['a'][0] + 1) * (path['s'][1] - path['s'][0] + 1)
+
 print(res)
