@@ -10,6 +10,7 @@ class PositionAndVelocity
   end
 end
 
+# X and Y
 class Coords
   attr_reader :x, :y
 
@@ -19,25 +20,8 @@ class Coords
   end
 end
 
-# ay = bx + c
+# y = ax + b
 class LinearEquation
-  attr_reader :a, :b, :c
-
-  def initialize(a, b, c)
-    @a = a
-    @b = b
-    @c = c
-  end
-
-  def multiply_itself(multiplier)
-    @a *= multiplier
-    @b *= multiplier
-    @c *= multiplier
-  end
-end
-
-# ay = b
-class Equation
   attr_reader :a, :b
 
   def initialize(a, b)
@@ -46,17 +30,12 @@ class Equation
   end
 end
 
-# eq1: ay = bx + c
-# eq2: ay = bx + c
-def linear_equation_solver(eq1, eq2)
-  if eq1.b != eq2.b
-    multiplier = eq2.b / eq1.b
-    eq1.multiply_itself(multiplier)
-  end
-
-  reduced_equation = Equation.new(eq1.a - eq2.a, eq1.c - eq2.c)
-  y = reduced_equation.b / reduced_equation.a
-  x = (eq1.a * y - eq1.c) / eq1.b
+# eq1: y = ax + b
+# eq2: y = ax + b
+def find_cross(eq1, eq2)
+  reduced_equation = LinearEquation.new(eq1.a - eq2.a, eq1.b - eq2.b) # 0 = ax + b
+  x = - reduced_equation.b / reduced_equation.a
+  y = eq1.a * x + eq1.b
   Coords.new(x, y)
 end
 
@@ -98,14 +77,12 @@ end
 
 def part1(grouped_lines, min, max)
   grouped_lines.reduce(0) do |acc, lines|
-    distance1 = lines[0].position.x / lines[0].velocity.x
-    b1 = lines[0].velocity.y / lines[0].velocity.x
-    c1 = distance1 * -1 * lines[0].velocity.y + lines[0].position.y
-    distance2 = lines[1].position.x / lines[1].velocity.x
-    b2 = lines[1].velocity.y / lines[1].velocity.x
-    c2 = distance2 * -1 * lines[1].velocity.y + lines[1].position.y
+    a1 = lines[0].velocity.y / lines[0].velocity.x
+    b1 = lines[0].position.x / lines[0].velocity.x * -1 * lines[0].velocity.y + lines[0].position.y
+    a2 = lines[1].velocity.y / lines[1].velocity.x
+    b2 = lines[1].position.x / lines[1].velocity.x * -1 * lines[1].velocity.y + lines[1].position.y
 
-    cross = linear_equation_solver(LinearEquation.new(1, b1, c1), LinearEquation.new(1, b2, c2))
+    cross = find_cross(LinearEquation.new(a1, b1), LinearEquation.new(a2, b2))
 
     if cross_in_area?(cross, min, max) && !cross_in_the_past?(cross, lines[0]) && !cross_in_the_past?(cross, lines[1])
       acc + 1
